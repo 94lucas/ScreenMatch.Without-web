@@ -1,7 +1,11 @@
 package br.com.alura.screenmatch;
 
+import br.com.alura.screenmatch.model.DadosEpisodio;
 import br.com.alura.screenmatch.model.DadosSerie;
+import br.com.alura.screenmatch.model.DadosTemporada;
 import br.com.alura.screenmatch.service.*;
+
+import java.util.*;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +23,7 @@ public class ScreenmatchApplication implements CommandLineRunner {
 		
 		// no lugar desse 1° ConsumoApi posso colocar um var
 		ConsumoApi consumoApi = new ConsumoApi();
-		var json = consumoApi.obterDados("http://www.omdbapi.com/?apikey=8abe4c93&t=matrix");
+		var json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&season=1&apikey=8abe4c93");
 		
 		//System.out.println(json);
 		
@@ -29,7 +33,20 @@ public class ScreenmatchApplication implements CommandLineRunner {
 		System.out.println(dados);
 		
 		
+		json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&season=1&episode=2&apikey=8abe4c93");
+		DadosEpisodio dadosEpisodio = conversor.obterDados(json, DadosEpisodio.class);
 		
+		System.out.println(dadosEpisodio);
+		
+		 List<DadosTemporada> temporadas = new ArrayList<>();
+		
+		for(int i = 1; i <= dados.totalTemporadas(); i++) {
+			json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&season="+ i + "&apikey=8abe4c93");
+			DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
+			temporadas.add(dadosTemporada);
+		}
+		
+		temporadas.forEach(System.out::println);
 	}
 
 }

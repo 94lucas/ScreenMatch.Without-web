@@ -15,16 +15,10 @@ public class ConverteDados implements IConverteDados{
 	public <T> T obterDados(String json, Class<T> classe) {
 		try {
 			return mapper.readValue(json, classe);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-		
+            throw new RuntimeException(e);
+        }
+
+	
 	}
-	
-	
 }
